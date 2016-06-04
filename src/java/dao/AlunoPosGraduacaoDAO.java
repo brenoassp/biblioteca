@@ -106,7 +106,7 @@ public class AlunoPosGraduacaoDAO implements DAO<AlunoPosGraduacao>{
 
     @Override
     public void delete(AlunoPosGraduacao t) {
-        //PessoaDAO.getInstance().delete(t);
+        PessoaDAO.getInstance().delete(t);
     }
 
     @Override
@@ -115,9 +115,9 @@ public class AlunoPosGraduacaoDAO implements DAO<AlunoPosGraduacao>{
     }
 
     @Override
-    public AlunoPosGraduacao get(String matricula) {
+    public AlunoPosGraduacao get(String id) {
         for(AlunoPosGraduacao aluno : getAll()){
-            if(aluno.getMatricula().equals(matricula)){
+            if(aluno.getMatricula().equals(id)){
                 return aluno;
             }
         }

@@ -6,16 +6,14 @@ import java.sql.Date;
  *
  * @author anubis
  */
-public class Funcionario extends Pessoa{
+public class Funcionario extends Usuario{
     private String clt;
-    private String matricula;
     
     public Funcionario() {}
 
     public Funcionario(String cpf, String nome, String endereco, 
-            String telefone, String matricula) {
-        super(cpf, nome, endereco, telefone);
-        this.matricula = matricula;
+            String telefone, String matricula, String senha, String clt) {
+        super(cpf, nome, endereco, telefone, matricula, senha);
         this.clt = clt;
     }
 
@@ -27,12 +25,5 @@ public class Funcionario extends Pessoa{
         this.clt = clt;
     }
 
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
     
  }

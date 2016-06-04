@@ -5,44 +5,43 @@
  */
 package dao;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Aluno;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.AlunoGraduacao;
 import model.AlunoPosGraduacao;
 import model.Funcionario;
 import model.Servidor;
+import model.Pessoa;
 import model.Usuario;
+import persistencia.DatabaseLocator;
 
 /**
  *
  * @author breno
  */
-public class UsuarioDAO implements DAO<Usuario>{
+public class PessoaDAO implements DAO<Pessoa>{
 
-    private static final UsuarioDAO instancia = new UsuarioDAO();
+    private static final PessoaDAO instancia = new PessoaDAO();
     
-    public static UsuarioDAO getInstance(){
+    public static PessoaDAO getInstance(){
         return instancia;
     }
     
     @Override
-    public List<Usuario> getAll() {
-        List<Usuario> list = new ArrayList<>();
-        for(Aluno aluno : AlunoDAO.getInstance().getAll()){
-            list.add(aluno);
-        }
-        for(Funcionario funcionario : FuncionarioDAO.getInstance().getAll()){
-            list.add(funcionario);
-        }
-        for(Servidor servidor : ServidorDAO.getInstance().getAll()){
-            list.add(servidor);
+    public List<Pessoa> getAll() {
+        List<Pessoa> list = new ArrayList<>();
+        for(Usuario usuario : UsuarioDAO.getInstance().getAll()){
+            list.add(usuario);
         }
         return list;
     }
 
     @Override
-    public void insert(Usuario t) {
+    public void insert(Pessoa t) {
         if(t instanceof AlunoGraduacao){
             AlunoGraduacaoDAO.getInstance().insert((AlunoGraduacao)t);
         }else if(t instanceof AlunoPosGraduacao){
@@ -51,11 +50,13 @@ public class UsuarioDAO implements DAO<Usuario>{
             FuncionarioDAO.getInstance().insert((Funcionario)t);
         }else if(t instanceof Servidor){
             ServidorDAO.getInstance().insert((Servidor)t);
+        }else if(t instanceof Usuario){
+            UsuarioDAO.getInstance().insert((Usuario)t);
         }
     }
 
     @Override
-    public void update(Usuario t) {
+    public void update(Pessoa t) {
         if(t instanceof AlunoGraduacao){
             AlunoGraduacaoDAO.getInstance().update((AlunoGraduacao)t);
         }else if(t instanceof AlunoPosGraduacao){
@@ -64,25 +65,37 @@ public class UsuarioDAO implements DAO<Usuario>{
             FuncionarioDAO.getInstance().update((Funcionario)t);
         }else if(t instanceof Servidor){
             ServidorDAO.getInstance().update((Servidor)t);
+        }else if(t instanceof Usuario){
+            UsuarioDAO.getInstance().update((Usuario)t);
         }
     }
 
     @Override
-    public void delete(Usuario t) {
-        PessoaDAO.getInstance().delete(t);
+    public void delete(Pessoa t) {
+        try {
+            PreparedStatement stmt = DatabaseLocator.getConnection().prepareStatement("delete" +
+                    "from pessoa where cpf=?");
+            stmt.setString(1, t.getCpf());
+            stmt.execute();
+            stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public Usuario get(int id) {
+    public Pessoa get(int id) {
         
         return null;
     }
 
     @Override
-    public Usuario get(String id) {
-        for(Usuario usuario : getAll()){
-            if(usuario.getMatricula().equals(id)){
-                return usuario;
+    public Pessoa get(String id) {
+        for(Pessoa pessoa : getAll()){
+            if(pessoa.getCpf().equals(id)){
+                return pessoa;
             }
         }
         return null;

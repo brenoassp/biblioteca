@@ -8,42 +8,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Funcionario;
+import model.Servidor;
 import persistencia.DatabaseLocator;
 
 /**
  *
  * @author anubis
  */
-public class FuncionarioDAO implements DAO<Funcionario>{
+public class ServidorDAO implements DAO<Servidor>{
     
-    private static FuncionarioDAO instancia = new FuncionarioDAO();
+    private static final ServidorDAO instancia = new ServidorDAO();
     
-    public static FuncionarioDAO getInstance(){
+    public static ServidorDAO getInstance(){
         return instancia;
     }
     
     @Override
-    public List<Funcionario> getAll() {
+    public List<Servidor> getAll() {
         Statement stmt;
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM ((funcionario INNER JOIN "
-                    + " usuario on funcionario.matricula = usuario.matricula)"
+            String sql = "SELECT * FROM ((servidor INNER JOIN "
+                    + " usuario on servidor.matricula = usuario.matricula)"
                     + "INNER JOIN pessoa on usuario.cpf = pessoa.cpf)";
             ResultSet rs = stmt.executeQuery(sql);
-            List<Funcionario> list = new ArrayList<Funcionario>();
+            List<Servidor> list = new ArrayList<Servidor>();
             while(rs.next()){
                 String matricula = rs.getString("matricula");
-                String clt = rs.getString("clt");
                 String cpf = rs.getString("cpf");
                 String senha = rs.getString("senha");
                 String nome = rs.getString("nome");
                 String endereco = rs.getString("endereco");
                 String telefone = rs.getString("telefone");
-                Funcionario funcionario = new Funcionario(cpf, nome, endereco, 
-                                            telefone, matricula, senha, clt);
-                list.add(funcionario);
+                Servidor servidor = new Servidor(cpf, nome, endereco, 
+                                            telefone, matricula, senha);
+                list.add(servidor);
             }
             return list;
         } catch (SQLException ex) {
@@ -55,7 +54,7 @@ public class FuncionarioDAO implements DAO<Funcionario>{
     }
 
     @Override
-    public void insert(Funcionario t) {
+    public void insert(Servidor t) {
         PreparedStatement stmt;
         try {
             //inserir pessoa
@@ -77,12 +76,11 @@ public class FuncionarioDAO implements DAO<Funcionario>{
             stmt.setString(3, t.getSenha());
             stmt.execute();
             stmt.close();
-            //inserir funcionario
-            sql = "INSERT INTO funcionario (matricula, clt) "
-                    + "values (?,?)";
+            //inserir servidor
+            sql = "INSERT INTO servidor (matricula) "
+                    + "values (?)";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setString(1, t.getMatricula());
-            stmt.setString(2, t.getClt());
             stmt.execute();
             stmt.close();
         } catch (SQLException ex) {
@@ -93,7 +91,7 @@ public class FuncionarioDAO implements DAO<Funcionario>{
     }
 
     @Override
-    public void update(Funcionario t) {
+    public void update(Servidor t) {
         try {
             //update pessoa
             String sql = "update pessoa set nome=?, endereco=?, telefone=?" +
@@ -113,13 +111,6 @@ public class FuncionarioDAO implements DAO<Funcionario>{
             stmt.setString(3, t.getMatricula());
             stmt.execute();
             stmt.close();
-            //update funcionario
-            sql = "update funcionario set clt=? where matricula=?";
-            stmt = DatabaseLocator.getConnection().prepareStatement(sql);
-            stmt.setString(1, t.getClt());
-            stmt.setString(2, t.getMatricula());
-            stmt.execute();
-            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
@@ -128,20 +119,20 @@ public class FuncionarioDAO implements DAO<Funcionario>{
     }
 
     @Override
-    public void delete(Funcionario t) {
-        PessoaDAO.getInstance().delete(t);
+    public void delete(Servidor t) {
+        //PessoaDAO.getInstance().delete(t);
     }
 
     @Override
-    public Funcionario get(int id) {
+    public Servidor get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Funcionario get(String id) {
-        for(Funcionario funcionario : getAll()){
-            if(funcionario.getMatricula().equals(id)){
-                return funcionario;
+    public Servidor get(String id) {
+        for(Servidor servidor : getAll()){
+            if(servidor.getMatricula().equals(id)){
+                return servidor;
             }
         }
         return null;

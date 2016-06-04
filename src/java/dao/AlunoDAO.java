@@ -46,7 +46,7 @@ public class AlunoDAO implements DAO<Aluno>{
 
     @Override
     public void delete(Aluno t) {
-        //PessoaDAO.getInstance().delete(t);
+        PessoaDAO.getInstance().delete(t);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class AlunoDAO implements DAO<Aluno>{
     }
 
     @Override
-    public Aluno get(String matricula) {
+    public Aluno get(String id) {
         for(Aluno aluno : getAll()){
-            if(aluno.getMatricula().equals(matricula)){
+            if(aluno.getMatricula().equals(id)){
                 return aluno;
             }
         }
