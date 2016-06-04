@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Date;
+
 /**
  *
  * @author anubis
@@ -10,9 +12,9 @@ public class Aluno extends Usuario{
     
     public Aluno() {}
 
-    public Aluno(String cpf, String nome, String dataNascimento, String endereco, 
-            String telefone, String matricula, float notaProcessoSeletivo) {
-        super(cpf, nome, dataNascimento, endereco, telefone, matricula);
+    public Aluno(String cpf, String nome, String endereco, 
+            String telefone, String matricula, float notaProcessoSeletivo, String senha) {
+        super(cpf, nome, endereco, telefone, matricula, senha);
         this.notaProcessoSeletivo = notaProcessoSeletivo;
     }
 

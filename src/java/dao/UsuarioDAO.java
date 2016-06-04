@@ -7,7 +7,10 @@ package dao;
 
 import action.LoginAction;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +31,18 @@ public class UsuarioDAO implements DAO<Usuario>{
     
     @Override
     public List<Usuario> getAll() {
+        Statement stmt;
+        try {
+            stmt = DatabaseLocator.getConnection().createStatement();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -53,7 +68,7 @@ public class UsuarioDAO implements DAO<Usuario>{
     }
 
     @Override
-    public Usuario get(String id) {
+    public Usuario get(String matricula) {
         try {
             Connection conn = DatabaseLocator.getConnection();
             

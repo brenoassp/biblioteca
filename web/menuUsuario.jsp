@@ -1,3 +1,6 @@
+<%@page import="model.AlunoGraduacao"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.AlunoGraduacaoDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -7,7 +10,7 @@
     </head>
     <body>
         <h1>Biblioteca</h1>
-        
+      
         <form method="post" action="FrontController?action=RedirectAction&page=acervo.jsp">
             <input type=submit value="Buscar o Acervo">
         </form>

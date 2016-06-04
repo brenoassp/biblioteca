@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Date;
 import java.util.Observable;
 import java.util.Observer;
 import state.UsuarioEstado;
@@ -12,13 +13,15 @@ public class Usuario extends Pessoa implements Observer{
 
     private String matricula;
     private UsuarioEstado estado;
+    private String senha;
     
     public Usuario() {}
 
-    public Usuario(String cpf, String nome, String dataNascimento, String endereco, 
-            String telefone, String matricula) {
-        super(cpf, nome, dataNascimento, endereco, telefone);
+    public Usuario(String cpf, String nome, String endereco, 
+            String telefone, String matricula, String senha) {
+        super(cpf, nome, endereco, telefone);
         this.matricula = matricula;
+        this.senha = senha;
     }
 
     public String getMatricula() {
@@ -45,6 +48,14 @@ public class Usuario extends Pessoa implements Observer{
     
     public boolean isFuncionario(){
         return false;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
     
  }

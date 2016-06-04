@@ -9,9 +9,10 @@ public class AlunoGraduacao extends Aluno{
 
     public AlunoGraduacao() {}
 
-    public AlunoGraduacao(String cpf, String nome, String dataNascimento, String endereco, 
-            String telefone, String matricula, float notaProcessoSeletivo, String modoIngresso) {
-        super(cpf, nome, dataNascimento, endereco, telefone, matricula, notaProcessoSeletivo);
+    public AlunoGraduacao(String cpf, String nome, String endereco, 
+            String telefone, String matricula, float notaProcessoSeletivo, 
+            String modoIngresso, String senha) {
+        super(cpf, nome, endereco, telefone, matricula, notaProcessoSeletivo, senha);
         this.modoIngresso = modoIngresso;
     }
 
