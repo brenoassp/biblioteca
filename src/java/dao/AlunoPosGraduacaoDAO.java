@@ -13,57 +13,57 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.AlunoGraduacao;
+import model.AlunoPosGraduacao;
 import persistencia.DatabaseLocator;
 
 /**
  *
  * @author breno
  */
-public class AlunoGraduacaoDAO implements DAO<AlunoGraduacao>{
+public class AlunoPosGraduacaoDAO implements DAO<AlunoPosGraduacao>{
 
-    private static final AlunoGraduacaoDAO instancia = new AlunoGraduacaoDAO();
+    private static final AlunoPosGraduacaoDAO instancia = new AlunoPosGraduacaoDAO();
     
-    public static AlunoGraduacaoDAO getInstance(){
+    public static AlunoPosGraduacaoDAO getInstance(){
         return instancia;
     }
     
     @Override
-    public List<AlunoGraduacao> getAll() {
+    public List<AlunoPosGraduacao> getAll() {
         Statement stmt;
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM ((aluno_graduacao INNER JOIN "
-                    + " aluno on aluno_graduacao.matricula = aluno.matricula)"
-                    + "INNER JOIN usuario on aluno_graduacao.matricula = usuario.matricula)"
+            String sql = "SELECT * FROM ((aluno_posgraduacao INNER JOIN "
+                    + " aluno on aluno_posgraduacao.matricula = aluno.matricula)"
+                    + "INNER JOIN usuario on aluno_posgraduacao.matricula = usuario.matricula)"
                     + "INNER JOIN pessoa on usuario.cpf = pessoa.cpf";
             ResultSet rs = stmt.executeQuery(sql);
-            List<AlunoGraduacao> list = new ArrayList<AlunoGraduacao>();
+            List<AlunoPosGraduacao> list = new ArrayList<AlunoPosGraduacao>();
             while(rs.next()){
                 String matricula  = rs.getString("matricula");;
-                String modoDeIngresso = rs.getString("modoDeIngresso");
+                String tipoDePos = rs.getString("tipoDePos");
                 float notaProcessoSeletivo = rs.getFloat("notaProcessoSeletivo");
                 String cpf = rs.getString("cpf");
                 String senha = rs.getString("senha");
                 String nome = rs.getString("nome");
                 String endereco = rs.getString("endereco");
                 String telefone = rs.getString("telefone");
-                AlunoGraduacao aluno = new AlunoGraduacao(cpf, nome, endereco, 
+                AlunoPosGraduacao aluno = new AlunoPosGraduacao(cpf, nome, endereco, 
                                             telefone, matricula, notaProcessoSeletivo, 
-                                            modoDeIngresso, senha);
+                                            tipoDePos, senha);
                 list.add(aluno);
             }
             return list;
         } catch (SQLException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlunoPosGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlunoPosGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void update(AlunoGraduacao t) {
+    public void update(AlunoPosGraduacao t) {
         try {
             //update pessoa
             String sql = "update pessoa set nome=?, endereco=?, telefone=?" +
@@ -91,32 +91,32 @@ public class AlunoGraduacaoDAO implements DAO<AlunoGraduacao>{
             stmt.execute();
             stmt.close();
             //update aluno_graduacao
-            sql = "update aluno_graduacao set modoDeIngresso=? where matricula=?";
+            sql = "update aluno_posgraduacao set tipoDePos=? where matricula=?";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
-            stmt.setString(1, t.getModoIngresso());
+            stmt.setString(1, t.getTipoDePos());
             stmt.setString(2, t.getMatricula());
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlunoPosGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void delete(AlunoGraduacao t) {
+    public void delete(AlunoPosGraduacao t) {
         //PessoaDAO.getInstance().delete(t);
     }
 
     @Override
-    public AlunoGraduacao get(int id) {
+    public AlunoPosGraduacao get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public AlunoGraduacao get(String matricula) {
-        for(AlunoGraduacao aluno : getAll()){
+    public AlunoPosGraduacao get(String matricula) {
+        for(AlunoPosGraduacao aluno : getAll()){
             if(aluno.getMatricula().equals(matricula)){
                 return aluno;
             }
@@ -125,7 +125,7 @@ public class AlunoGraduacaoDAO implements DAO<AlunoGraduacao>{
     }
 
     @Override
-    public void insert(AlunoGraduacao t) {
+    public void insert(AlunoPosGraduacao t) {
         PreparedStatement stmt;
         try {
             //inserir pessoa
@@ -155,18 +155,18 @@ public class AlunoGraduacaoDAO implements DAO<AlunoGraduacao>{
             stmt.setFloat(2, t.getNotaProcessoSeletivo());
             stmt.execute();
             stmt.close();
-            //inserir aluno de graduacao
-            sql = "INSERT INTO aluno_graduacao (matricula, modoDeIngresso) "
+            //inserir aluno de posGraduacao
+            sql = "INSERT INTO aluno_posgraduacao (matricula, tipoDePos) "
                     + "values (?,?)";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setString(1, t.getMatricula());
-            stmt.setString(2, t.getModoIngresso());
+            stmt.setString(2, t.getTipoDePos());
             stmt.execute();
             stmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlunoPosGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlunoPosGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
