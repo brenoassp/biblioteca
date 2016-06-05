@@ -13,36 +13,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Revista;
+import model.Livro;
 import persistencia.DatabaseLocator;
 
 /**
  *
  * @author breno
  */
-public class RevistaDAO implements DAO<Revista>{
+public class LivroDAO implements DAO<Livro>{
     
-    private static final RevistaDAO instancia = new RevistaDAO();
+    private static final LivroDAO instancia = new LivroDAO();
     
-    public static RevistaDAO getInstance(){
+    public static LivroDAO getInstance(){
         return instancia;
     }
 
     @Override
-    public List<Revista> getAll() {
+    public List<Livro> getAll() {
         Statement stmt;
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM ((item_revista INNER JOIN "
-                    + " item on item_revista.idrevista = item.iditem)";
+            String sql = "SELECT * FROM ((item_livroDidatico INNER JOIN "
+                    + " item on item_livroDidatico.idlivroDidatico = item.iditem)";
             ResultSet rs = stmt.executeQuery(sql);
-            List<Revista> list = new ArrayList<Revista>();
+            List<Livro> list = new ArrayList<Livro>();
             while(rs.next()){
-                int idRevista  = rs.getInt("idrevista");;
-                int numero = rs.getInt("numero");
+                int idLivro  = rs.getInt("idlivroDidatico");;
                 String titulo = rs.getString("titulo");
-                Revista revista = new Revista(idRevista, titulo, numero);
-                list.add(revista);
+                String editora = rs.getString("editora");
+                String ISBN = rs.getString("ISBN");
+                Livro livro = new Livro(idLivro, titulo, ISBN, editora);
+                list.add(livro);
             }
             return list;
         } catch (SQLException ex) {
@@ -54,22 +55,22 @@ public class RevistaDAO implements DAO<Revista>{
     }
 
     @Override
-    public Revista get(int id) {
-        for(Revista revista : getAll()){
-            if(revista.getId() == id){
-                return revista;
+    public Livro get(int id) {
+        for(Livro livro : getAll()){
+            if(livro.getId() == id){
+                return livro;
             }
         }
         return null;
     }
 
     @Override
-    public Revista get(String id) {
+    public Livro get(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void insert(Revista t) {
+    public void insert(Livro t) {
         PreparedStatement stmt;
         try {
             //inserir item
@@ -80,12 +81,13 @@ public class RevistaDAO implements DAO<Revista>{
             stmt.setString(2, t.getTitulo());
             stmt.execute();
             stmt.close();
-            //inserir revista
-            sql = "INSERT INTO item_revista (idrevista, numero) "
-                    + "values (?,?)";
+            //inserir livro
+            sql = "INSERT INTO item_livrodidatico (idlivroDidatico, ISBN, editora) "
+                    + "values (?,?,?)";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setInt(1, t.getId());
-            stmt.setInt(2, t.getNumero());
+            stmt.setString(2, t.getISBN());
+            stmt.setString(3, t.getEditora());
             stmt.execute();
             stmt.close();
         } catch (SQLException ex) {
@@ -96,7 +98,7 @@ public class RevistaDAO implements DAO<Revista>{
     }
 
     @Override
-    public void update(Revista t) {
+    public void update(Livro t) {
         try {
             //update item
             String sql = "update item set titulo=? where iditem=?";
@@ -105,11 +107,12 @@ public class RevistaDAO implements DAO<Revista>{
             stmt.setInt(2, t.getId());
             stmt.execute();
             stmt.close();
-            //update revista
-            sql = "update item_revista set numero=? where idrevista=?";
+            //update livro
+            sql = "update item_livrodidatico set ISBN=?, editora=? where idperiodico=?";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
-            stmt.setInt(1, t.getNumero());
-            stmt.setInt(2, t.getId());
+            stmt.setString(1, t.getISBN());
+            stmt.setString(2, t.getEditora());
+            stmt.setInt(3, t.getId());
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
@@ -120,7 +123,7 @@ public class RevistaDAO implements DAO<Revista>{
     }
 
     @Override
-    public void delete(Revista t) {
+    public void delete(Livro t) {
         //ItemDAO.getInstance().delete(t);
     }
     
