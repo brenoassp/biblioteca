@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Usuario;
 import persistencia.DatabaseLocator;
 
@@ -23,7 +24,7 @@ public class LoginAction implements Action{
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        try {
+        /*try {
             Connection conn = DatabaseLocator.getConnection();
             if(conn == null){
                 response.sendRedirect("menuFuncionario.jsp");
@@ -33,8 +34,8 @@ public class LoginAction implements Action{
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(LoginAction.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        /*
+        }*/
+        
         if(username.equals("admin")){
             response.sendRedirect("menuFuncionario.jsp");
         }
@@ -44,7 +45,7 @@ public class LoginAction implements Action{
         else{
             Usuario usuario = login(username, password);
             if (usuario != null) {
-                criaSessao();
+                criaSessao(request);
                 if(usuario.isFuncionario())
                     response.sendRedirect("menuFuncionario.jsp");
                 else
@@ -54,7 +55,7 @@ public class LoginAction implements Action{
                 response.sendRedirect("index.html");
             }
         
-        }*/
+        }
         
         
     }
@@ -72,11 +73,9 @@ public class LoginAction implements Action{
             return null;
     }
     
-    public static void criaSessao(){
-        return;
+    public static void criaSessao(HttpServletRequest request){
+        HttpSession session = request.getSession(true);
+        session.setAttribute("loggedIn", "true");
     }
     
-    public static void excluiSessao(){
-        return;
-    }
 }

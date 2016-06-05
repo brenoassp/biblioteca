@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,38 +16,30 @@
             <tr>
                <th style = "width: 100px;">ID</th>
                <th style = "width: 100px;">Título</th>
-               <th style = "width: 100px;">ISBN</th>
                <th style = "width: 100px;">Reservar</th>
             </tr>
          </thead>
          <tbody>
-            <%--                                  
-               // load ItemDAO
-               // search for all Items
-               //while(itemsResult.hasNext()){
-               //   item = itemResult.getNext();
-            --%>
-            <tr>
-                <td><%-- //item.getId(); --%></td>
-                <td><%-- //item.getTitulo(); --%></td>
-                <td><%-- //item.getISBN(); --%></td>
-                <td>
-                   <a href="FrontController?action=ReservarAction&item=<%-- //item.getId() --%>">
-                      Reservar
-                   </a>
-                </td>
-            </tr>
-            <%                               
-               // } 
-            %> 
-             
+           
+            <c:forEach items="${items}" var="item">
+                <tr>
+                    <td>${item.id}</td>
+                    <td><c:out value="${item.titulo}" /></td>
+                    <td>
+                       <a href="FrontController?action=ReservarAction&amp;item="${item.id}>
+                          Reservar
+                       </a>
+                    </td>
+                </tr>
+            </c:forEach>
+
          </tbody>
              
     </table>
     
     <br />
     
-    <form method="post" action="FrontController?action=RedirectAction&page=menuUsuario.jsp">
+    <form method="post" action="FrontController?action=RedirectAction&amp;page=menuUsuario.jsp">
         <input type=submit value="Voltar">
     </form>
     </body>
