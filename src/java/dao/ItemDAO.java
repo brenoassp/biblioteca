@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Item;
 import model.Livro;
 import persistencia.DatabaseLocator;
 
@@ -20,7 +21,7 @@ import persistencia.DatabaseLocator;
  *
  * @author breno
  */
-public class ItemDAO implements DAO<Livro>{
+public class ItemDAO implements DAO<Item>{
     
     private static final ItemDAO instancia = new ItemDAO();
     
@@ -29,101 +30,75 @@ public class ItemDAO implements DAO<Livro>{
     }
 
     @Override
-    public List<Livro> getAll() {
+    public List<Item> getAll() {
         Statement stmt;
+        List<Item> list = new ArrayList<>();
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM ((item_livroDidatico INNER JOIN "
-                    + " item on item_livroDidatico.idlivroDidatico = item.iditem)";
+            String sql = "SELECT * FROM item";
             ResultSet rs = stmt.executeQuery(sql);
-            List<Livro> list = new ArrayList<Livro>();
             while(rs.next()){
-                int idLivro  = rs.getInt("idlivroDidatico");;
+                int iditem  = rs.getInt("iditem");
                 String titulo = rs.getString("titulo");
-                String editora = rs.getString("editora");
-                String ISBN = rs.getString("ISBN");
-                Livro livro = new Livro(idLivro, titulo, ISBN, editora);
-                list.add(livro);
+                Item item = new Item(iditem, titulo);
+                list.add(item);
             }
             return list;
-        } catch (SQLException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return list;
     }
 
     @Override
-    public Livro get(int id) {
-        for(Livro livro : getAll()){
-            if(livro.getId() == id){
-                return livro;
+    public Item get(int id) {
+        for(Item item : getAll()){
+            if(item.getId() == id){
+                return item;
             }
         }
         return null;
     }
 
     @Override
-    public Livro get(String id) {
+    public Item get(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void insert(Livro t) {
+    public void insert(Item t) {
         PreparedStatement stmt;
         try {
             //inserir item
-            String sql = "INSERT INTO item (iditem, titulo) "
-                    + "values (?,?)";
+            String sql = "INSERT INTO item (iditem, titulo) values (?,?)";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setInt(1, t.getId());
             stmt.setString(2, t.getTitulo());
             stmt.execute();
             stmt.close();
-            //inserir livro
-            sql = "INSERT INTO item_livrodidatico (idlivroDidatico, ISBN, editora) "
-                    + "values (?,?,?)";
-            stmt = DatabaseLocator.getConnection().prepareStatement(sql);
-            stmt.setInt(1, t.getId());
-            stmt.setString(2, t.getISBN());
-            stmt.setString(3, t.getEditora());
-            stmt.execute();
-            stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void update(Livro t) {
+    public void update(Item t) {
+        PreparedStatement stmt;
         try {
             //update item
-            String sql = "update item set titulo=? where iditem=?";
-            PreparedStatement stmt = DatabaseLocator.getConnection().prepareStatement(sql);
+            String sql = "UPDATE item SET titulo=? WHERE iditem=?";
+            stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setString(1, t.getTitulo());
             stmt.setInt(2, t.getId());
             stmt.execute();
             stmt.close();
-            //update livro
-            sql = "update item_livrodidatico set ISBN=?, editora=? where idperiodico=?";
-            stmt = DatabaseLocator.getConnection().prepareStatement(sql);
-            stmt.setString(1, t.getISBN());
-            stmt.setString(2, t.getEditora());
-            stmt.setInt(3, t.getId());
-            stmt.execute();
-            stmt.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void delete(Livro t) {
+    public void delete(Item t) {
         //ItemDAO.getInstance().delete(t);
     }
     

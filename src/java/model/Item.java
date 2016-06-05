@@ -9,7 +9,7 @@ import java.util.Observer;
  *
  * @author anubis
  */
-public abstract class Item extends Observable{
+public class Item extends Observable{
     private int id;
     private String titulo;
     private List<Observer> observers;
