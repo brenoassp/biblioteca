@@ -30,6 +30,7 @@ public class AlunoPosGraduacaoDAO implements DAO<AlunoPosGraduacao>{
     
     @Override
     public List<AlunoPosGraduacao> getAll() {
+        List<AlunoPosGraduacao> list = new ArrayList<AlunoPosGraduacao>();
         Statement stmt;
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
@@ -38,7 +39,6 @@ public class AlunoPosGraduacaoDAO implements DAO<AlunoPosGraduacao>{
                     + "INNER JOIN usuario on aluno_posgraduacao.matricula = usuario.matricula)"
                     + "INNER JOIN pessoa on usuario.cpf = pessoa.cpf";
             ResultSet rs = stmt.executeQuery(sql);
-            List<AlunoPosGraduacao> list = new ArrayList<AlunoPosGraduacao>();
             while(rs.next()){
                 String matricula  = rs.getString("matricula");;
                 String tipoDePos = rs.getString("tipoDePos");
@@ -53,13 +53,13 @@ public class AlunoPosGraduacaoDAO implements DAO<AlunoPosGraduacao>{
                                             tipoDePos, senha);
                 list.add(aluno);
             }
-            return list;
+            
         } catch (SQLException ex) {
             Logger.getLogger(AlunoPosGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AlunoPosGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return list;
     }
 
     @Override

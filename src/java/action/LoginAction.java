@@ -1,6 +1,8 @@
 package action;
 
 import controller.FrontController;
+import dao.FuncionarioDAO;
+import dao.UsuarioDAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,21 +23,25 @@ public class LoginAction implements Action{
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+
+        String matricula = request.getParameter("matricula");
+        String senha = request.getParameter("senha");
         
-        /*try {
-            Connection conn = DatabaseLocator.getConnection();
-            if(conn == null){
+        UsuarioDAO dao = UsuarioDAO.getInstance();
+        Usuario user = dao.get(matricula);
+        
+        if(user != null && senha.equals(user.getSenha())){
+            criaSessao(request, matricula);
+            if(isFuncionario(user))
                 response.sendRedirect("menuFuncionario.jsp");
-            }
-            else{
+            else
                 response.sendRedirect("menuUsuario.jsp");
-            }
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(LoginAction.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
+        else{
+            response.sendRedirect("index.html");
+        }
         
+        /*
         if(username.equals("admin")){
             response.sendRedirect("menuFuncionario.jsp");
         }
@@ -45,7 +51,7 @@ public class LoginAction implements Action{
         else{
             Usuario usuario = login(username, password);
             if (usuario != null) {
-                criaSessao(request);
+                criaSessao(request, matricula);
                 if(usuario.isFuncionario())
                     response.sendRedirect("menuFuncionario.jsp");
                 else
@@ -55,27 +61,21 @@ public class LoginAction implements Action{
                 response.sendRedirect("index.html");
             }
         
-        }
+        }*/
         
         
     }
     
-    public Usuario login(String username, String password){
-        // acessa banco de dados e verifica se existe usuário
-   
-        if (username.equals("") || password.equals("")) {
-            return null;
-        }
-        else if(username.equals("admin") && password.equals("admin")){
-            return new Usuario();
-        }
-        else
-            return null;
-    }
-    
-    public static void criaSessao(HttpServletRequest request){
+    private void criaSessao(HttpServletRequest request, String matricula){
         HttpSession session = request.getSession(true);
         session.setAttribute("loggedIn", "true");
+    }
+    
+    private boolean isFuncionario(Usuario user){
+        FuncionarioDAO dao = FuncionarioDAO.getInstance();
+        if(dao.get(user.getMatricula()) != null)
+            return true;
+        else return false;
     }
     
 }
