@@ -60,6 +60,16 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public List<Emprestimo> getEmprestimosUsuario(String matricula) {
+        List<Emprestimo> emprestimos = new ArrayList<>();
+        for(Emprestimo emprestimo: getAll()){
+            if(emprestimo.getMatriculaUsuario().equals(matricula))
+                emprestimos.add(emprestimo);
+        }
+        return emprestimos;
+    }
+
 
     @Override
     public Emprestimo get(int id) {
@@ -137,6 +147,7 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
             Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 
     
 }

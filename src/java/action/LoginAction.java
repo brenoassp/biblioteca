@@ -1,18 +1,12 @@
 package action;
 
-import controller.FrontController;
 import dao.FuncionarioDAO;
 import dao.UsuarioDAO;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Usuario;
-import persistencia.DatabaseLocator;
 
 /**
  *
@@ -50,9 +44,7 @@ public class LoginAction implements Action{
     
     private boolean isFuncionario(Usuario user){
         FuncionarioDAO dao = FuncionarioDAO.getInstance();
-        if(dao.get(user.getMatricula()) != null)
-            return true;
-        else return false;
+        return dao.get(user.getMatricula()) != null;
     }
     
 }

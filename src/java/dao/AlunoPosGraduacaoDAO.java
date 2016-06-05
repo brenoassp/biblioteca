@@ -34,9 +34,9 @@ public class AlunoPosGraduacaoDAO implements DAO<AlunoPosGraduacao>{
         Statement stmt;
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM ((aluno_posgraduacao INNER JOIN "
-                    + " aluno on aluno_posgraduacao.matricula = aluno.matricula)"
-                    + "INNER JOIN usuario on aluno_posgraduacao.matricula = usuario.matricula)"
+            String sql = "SELECT * FROM ((aluno_posGraduacao INNER JOIN "
+                    + " aluno on aluno_posGraduacao.matricula = aluno.matricula)"
+                    + "INNER JOIN usuario on aluno_posGraduacao.matricula = usuario.matricula)"
                     + "INNER JOIN pessoa on usuario.cpf = pessoa.cpf";
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){

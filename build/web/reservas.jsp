@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,38 +18,28 @@
         <h3> Reservas Solicitadas </h3>
         
         <table>
-         <thead>
-            <tr>
-               <th style = "width: 100px;">ID</th>
-               <th style = "width: 100px;">Data da Reserva</th>
-               <th style = "width: 100px;">ISBN</th>
-               <th style = "width: 100px;">Data Limite</th>
-               <th style = "width: 100px;">Cancelar</th>
-            </tr>
-         </thead>
-         <tbody>
-            <%--                                  
-               // load ItemDAO
-               // search for all Items
-               //while(itemsResult.hasNext()){
-               //   item = itemResult.getNext();
-            --%>
-            <tr>
-                <td><%-- //item.getId(); --%></td>
-                <td><%-- //item.getTitulo(); --%></td>
-                <td><%-- //item.getISBN(); --%></td>
-                <td><%-- //item.getISBN(); --%></td>
-                <td>
-                   <a href="FrontController?action=CancelarReservaAction&item=<%-- //reserva.getId() --%>">
-                      Cancelar
-                   </a>
-                </td>
-            </tr>
-            <%--                               
-                } 
-            --%> 
-             
-         </tbody>
+            <thead>
+                <tr>
+                   <th style = "width: 100px;">ID</th>
+                   <th style = "width: 100px;">Posição</th>
+                   <th style = "width: 100px;">Cancelar</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <c:forEach items="${reservas}" var="reserva">
+                    <tr>
+                        <td>${reserva.iditem}</td>
+                        <td>${reserva.posicao}</td>
+                        <td>
+                           <a href="FrontController?action=CancelarReservaAction&amp;item=${reserva.iditem}">
+                              Cancelar
+                           </a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+            </tbody>
     </table>
          
         <br />
@@ -56,44 +47,34 @@
         <h3> Reservas Atendidas </h3>
         
         <table>
-         <thead>
-            <tr>
-               <th style = "width: 100px;">ID</th>
-               <th style = "width: 100px;">Data da Reserva</th>
-               <th style = "width: 100px;">ISBN</th>
-               <th style = "width: 100px;">Posição</th>
-               <th style = "width: 100px;">Cancelar</th>
-            </tr>
-         </thead>
-         <tbody>
-            <%--                                  
-               // load ItemDAO
-               // search for all Items
-               //while(itemsResult.hasNext()){
-               //   item = itemResult.getNext();
-            --%>
-            <tr>
-                <td><%-- //item.getId(); --%></td>
-                <td><%-- //item.getTitulo(); --%></td>
-                <td><%-- //item.getISBN(); --%></td>
-                <td><%-- //resva.getPosicao(); --%></td>
-                <td>
-                   <a href="FrontController?action=CancelarReserva&item=<%-- //reserva.getId() --%>">
-                      Cancelar
-                   </a>
-                </td>
-            </tr>
-            <%                               
-               // } 
-            %> 
-             
-         </tbody>
-             
+            <thead>
+                <tr>
+                   <th style = "width: 100px;">ID</th>
+                       <th style = "width: 100px;">Posição</th>
+                       <th style = "width: 100px;">Cancelar</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <c:forEach items="${reservas}" var="reserva">
+                    <tr>
+                        <td>${reserva.iditem}</td>
+                        <td>${reserva.posicao}</td>
+                        <td>
+                           <a href="FrontController?action=CancelarReservaAction&amp;item=${reserva.iditem}">
+                              Cancelar
+                           </a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+            </tbody>
+
     </table>
             
     <br />
           
-    <form method="post" action="FrontController?action=RedirectAction&page=menuUsuario.jsp">
+    <form method="post" action="FrontController?action=RedirectAction&amp;page=menuUsuario.jsp">
         <input type=submit value="Voltar">
     </form>
             

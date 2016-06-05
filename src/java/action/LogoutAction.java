@@ -19,6 +19,6 @@ public class LogoutAction implements Action{
     
     public static void excluiSessao(HttpServletRequest request){
         HttpSession session = request.getSession(true);
-        session.setAttribute("loggedIn", 0);
+        session.setAttribute("loggedIn", null);
     }
 }

@@ -30,11 +30,11 @@ public class ReservaDAO implements DAO<Reserva>{
     @Override
     public List<Reserva> getAll() {
         Statement stmt;
+        List<Reserva> list = new ArrayList<>();
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
             String sql = "SELECT * FROM reserva";
             ResultSet rs = stmt.executeQuery(sql);
-            List<Reserva> list = new ArrayList<Reserva>();
             while(rs.next()){
                 String matriculaUsuario = rs.getString("matriculaUsuario");
                 int iditem = rs.getInt("iditem");
@@ -43,14 +43,29 @@ public class ReservaDAO implements DAO<Reserva>{
                 list.add(reserva);
             }
             return list;
-        } catch (SQLException ex) {
-            Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return list;
+    }
+    
+    public List<Reserva> getReservasUsuario(String matricula){
+        List<Reserva> reservas = new ArrayList<>();
+        for(Reserva reserva: getAll()){
+            if(reserva.getMatriculaUsuario().equals(matricula))
+                reservas.add(reserva);
+        }
+        return reservas;
     }
 
+    public Reserva get(int id, String matricula){
+        for(Reserva reserva: getAll()){
+            if(reserva.getMatriculaUsuario().equals(matricula) && reserva.getIditem() == id)
+                return reserva;
+        }
+        return null;
+    }
+    
     @Override
     public Reserva get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -74,9 +89,7 @@ public class ReservaDAO implements DAO<Reserva>{
             stmt.setInt(3, t.getPosicao());
             stmt.execute();
             stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -93,9 +106,7 @@ public class ReservaDAO implements DAO<Reserva>{
             stmt.setInt(3, t.getIditem());
             stmt.execute();
             stmt.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -103,16 +114,13 @@ public class ReservaDAO implements DAO<Reserva>{
     @Override
     public void delete(Reserva t) {
         try {
-            PreparedStatement stmt = DatabaseLocator.getConnection().prepareStatement("delete" +
+            PreparedStatement stmt = DatabaseLocator.getConnection().prepareStatement("delete " +
                     "from reserva where ( (matriculaUsuario=?) AND (iditem=?) )");
-            stmt.setInt(1, t.getPosicao());
-            stmt.setString(2, t.getMatriculaUsuario());
-            stmt.setInt(3, t.getIditem());
+            stmt.setString(1, t.getMatriculaUsuario());
+            stmt.setInt(2, t.getIditem());
             stmt.execute();
             stmt.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

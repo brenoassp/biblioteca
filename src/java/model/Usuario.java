@@ -1,6 +1,8 @@
 package model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import state.UsuarioEstado;
@@ -14,6 +16,7 @@ public class Usuario extends Pessoa implements Observer{
     private String matricula;
     private UsuarioEstado estado;
     private String senha;
+    private List<Reserva> reservas;
     
     public Usuario() {}
 
@@ -22,6 +25,7 @@ public class Usuario extends Pessoa implements Observer{
         super(cpf, nome, endereco, telefone);
         this.matricula = matricula;
         this.senha = senha;
+        reservas = new ArrayList<>();
     }
 
     public String getMatricula() {
@@ -40,7 +44,6 @@ public class Usuario extends Pessoa implements Observer{
         this.estado = estado;
     }
     
-
     @Override
     public void update(Observable o, Object arg) {
         // um livro com reserva foi devolvido
@@ -56,6 +59,18 @@ public class Usuario extends Pessoa implements Observer{
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void addReserva(Reserva reserva){
+        reservas.add(reserva);
+    }
+    
+    public void removeReserva(Reserva reserva){
+        reservas.remove(reserva);
     }
     
  }

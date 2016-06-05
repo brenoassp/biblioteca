@@ -24,13 +24,13 @@
         
         <br />
         
-        <form method="post" action="FrontController?action=RedirectAction&amp;page=reservas.jsp">
+        <form method="post" action="FrontController?action=BuscaReservasAction">
             <input type=submit value="Consultar Reservas">
         </form>
         
         <br />
         
-        <form method="post" action="FrontController?action=RedirectAction&amp;page=emprestimos.jsp">
+        <form method="post" action="FrontController?action=BuscaEmprestimosAction">
             <input type=submit value="Renovar Empréstimo">
         </form>
         
