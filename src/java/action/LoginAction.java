@@ -41,34 +41,11 @@ public class LoginAction implements Action{
             response.sendRedirect("index.html");
         }
         
-        /*
-        if(username.equals("admin")){
-            response.sendRedirect("menuFuncionario.jsp");
-        }
-        else if(username.equals("aluno")){
-            response.sendRedirect("menuUsuario.jsp");
-        }
-        else{
-            Usuario usuario = login(username, password);
-            if (usuario != null) {
-                criaSessao(request, matricula);
-                if(usuario.isFuncionario())
-                    response.sendRedirect("menuFuncionario.jsp");
-                else
-                    response.sendRedirect("menuUsuario.jsp");
-            }
-            else{
-                response.sendRedirect("index.html");
-            }
-        
-        }*/
-        
-        
     }
     
     private void criaSessao(HttpServletRequest request, String matricula){
         HttpSession session = request.getSession(true);
-        session.setAttribute("loggedIn", "true");
+        session.setAttribute("loggedIn", matricula);
     }
     
     private boolean isFuncionario(Usuario user){
