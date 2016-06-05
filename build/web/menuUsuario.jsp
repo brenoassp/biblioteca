@@ -18,19 +18,19 @@
     <body>
         <h1>Biblioteca</h1>
      
-        <form method="post" action="FrontController?action=RedirectAction&page=acervo.jsp">
+        <form method="post" action="FrontController?action=BuscaAcervoAction">
             <input type=submit value="Buscar o Acervo">
         </form>
         
         <br />
         
-        <form method="post" action="FrontController?action=RedirectAction&page=reservas.jsp">
+        <form method="post" action="FrontController?action=RedirectAction&amp;page=reservas.jsp">
             <input type=submit value="Consultar Reservas">
         </form>
         
         <br />
         
-        <form method="post" action="FrontController?action=RedirectAction&page=emprestimos.jsp">
+        <form method="post" action="FrontController?action=RedirectAction&amp;page=emprestimos.jsp">
             <input type=submit value="Renovar Empréstimo">
         </form>
         

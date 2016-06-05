@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,6 +101,15 @@ public class ItemDAO implements DAO<Item>{
     @Override
     public void delete(Item t) {
         //ItemDAO.getInstance().delete(t);
+    }
+    
+    public List<Item> search(String term){
+        List<Item> itemsSearched = new ArrayList<>();
+        for(Item i: getAll()){
+            if(i.getTitulo().contains(term))
+                itemsSearched.add(i);
+        }
+        return itemsSearched;
     }
     
 }

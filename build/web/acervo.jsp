@@ -26,7 +26,7 @@
                     <td>${item.id}</td>
                     <td><c:out value="${item.titulo}" /></td>
                     <td>
-                       <a href="FrontController?action=ReservarAction&amp;item="${item.id}>
+                       <a href="FrontController?action=ReservarAction&amp;item=${item.id}">
                           Reservar
                        </a>
                     </td>

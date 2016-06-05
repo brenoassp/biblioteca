@@ -13,7 +13,7 @@ public class DatabaseLocator {
     
         String driver = "com.mysql.jdbc.Driver";
         Class.forName(driver);
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydb?DateTimeBehavior=convertToNull", "root", "1234");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydb?DateTimeBehavior=convertToNull", "root", "");
         return conn;
 
     }
