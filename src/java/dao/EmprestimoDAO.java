@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,11 +33,11 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
     @Override
     public List<Emprestimo> getAll() {
         Statement stmt;
+        List<Emprestimo> list = new ArrayList<>();
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
             String sql = "SELECT * FROM emprestimo";
-            ResultSet rs = stmt.executeQuery(sql);
-            List<Emprestimo> list = new ArrayList<Emprestimo>();
+            ResultSet rs = stmt.executeQuery(sql);  
             while(rs.next()){
                 int idemprestimo  = rs.getInt("idemprestimo");;
                 String matriculaUsuario = rs.getString("matriculaUsuario");
@@ -45,20 +46,21 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
                 dataEmprestimo.setTime(rs.getDate("dataEmprestimo"));
                 Calendar dataDevolucao = Calendar.getInstance();
                 dataDevolucao.setTime(rs.getDate("dataDevolucao"));
-                Calendar dataEntrega = Calendar.getInstance();
-                dataEntrega.setTime(rs.getDate("dataEntrega"));
+                Calendar dataEntrega = null;
+                if(rs.getDate("dataEntrega") != null){
+                    dataEntrega = Calendar.getInstance();
+                    dataEntrega.setTime(rs.getDate("dataEntrega"));
+                }
                 Emprestimo emprestimo = new Emprestimo(idemprestimo, matriculaUsuario,
                                             iditem, dataEmprestimo, dataDevolucao,
                                             dataEntrega);
                 list.add(emprestimo);
             }
-            return list;
-        } catch (SQLException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+            
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return list;
     }
     
     public List<Emprestimo> getEmprestimosUsuario(String matricula) {
@@ -68,6 +70,16 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
                 emprestimos.add(emprestimo);
         }
         return emprestimos;
+    }
+    
+    public List<Emprestimo> getEmprestimosPendentesUsuario(String matricula) {
+        List<Emprestimo> emprestimos = new ArrayList<>();
+        for(Emprestimo emprestimo: getAll()){
+            if(emprestimo.getMatriculaUsuario().equals(matricula) && emprestimo.getDataEntrega() == null)
+                emprestimos.add(emprestimo);
+        }
+        return emprestimos;
+        
     }
 
 
@@ -126,9 +138,7 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
             stmt.setInt(6, t.getIdemprestimo());
             stmt.execute();
             stmt.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
