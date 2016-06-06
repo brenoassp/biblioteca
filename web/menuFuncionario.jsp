@@ -14,6 +14,12 @@
     <body>
         <h1>Biblioteca - Acesso Funcionário</h1>
         
+        <form method="post" action="FrontController?action=BuscaAcervoFuncionarioAction">
+            <input type=submit value="Buscar Acervo">
+        </form>
+        
+        <br />
+        
         <form method="post" action="FrontController?action=BuscaEmprestimosFuncionarioAction">
             <input type=submit value="Buscar Empréstimos do Aluno">
         </form>

@@ -1,0 +1,135 @@
+[33mcommit 1cfb06c5157daf3557f30fd3e508643b0a3bdd0f[m
+Author: ehauckdo <ehauckdo@uwaterloo.ca>
+Date:   Sun Jun 5 13:47:27 2016 -0300
+
+    Novo Action para acesso ao acervo, acervo.jsp funcionando, opção de buscar por titulo em ItemDAO
+
+[1mdiff --git a/build/web/WEB-INF/classes/action/BuscaAcervoAction.class b/build/web/WEB-INF/classes/action/BuscaAcervoAction.class[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1f3adef[m
+Binary files /dev/null and b/build/web/WEB-INF/classes/action/BuscaAcervoAction.class differ
+[1mdiff --git a/build/web/WEB-INF/classes/dao/ItemDAO.class b/build/web/WEB-INF/classes/dao/ItemDAO.class[m
+[1mindex f36675a..ec03f75 100644[m
+Binary files a/build/web/WEB-INF/classes/dao/ItemDAO.class and b/build/web/WEB-INF/classes/dao/ItemDAO.class differ
+[1mdiff --git a/build/web/WEB-INF/classes/persistencia/DatabaseLocator.class b/build/web/WEB-INF/classes/persistencia/DatabaseLocator.class[m
+[1mindex 20cf70b..df37f3c 100644[m
+Binary files a/build/web/WEB-INF/classes/persistencia/DatabaseLocator.class and b/build/web/WEB-INF/classes/persistencia/DatabaseLocator.class differ
+[1mdiff --git a/build/web/acervo.jsp b/build/web/acervo.jsp[m
+[1mindex a1de303..6a1b5fc 100644[m
+[1m--- a/build/web/acervo.jsp[m
+[1m+++ b/build/web/acervo.jsp[m
+[36m@@ -26,7 +26,7 @@[m
+                     <td>${item.id}</td>[m
+                     <td><c:out value="${item.titulo}" /></td>[m
+                     <td>[m
+[31m-                       <a href="FrontController?action=ReservarAction&amp;item="${item.id}>[m
+[32m+[m[32m                       <a href="FrontController?action=ReservarAction&amp;item=${item.id}">[m
+                           Reservar[m
+                        </a>[m
+                     </td>[m
+[1mdiff --git a/build/web/menuUsuario.jsp b/build/web/menuUsuario.jsp[m
+[1mindex c3ab753..dc7a407 100644[m
+[1m--- a/build/web/menuUsuario.jsp[m
+[1m+++ b/build/web/menuUsuario.jsp[m
+[36m@@ -18,19 +18,19 @@[m
+     <body>[m
+         <h1>Biblioteca</h1>[m
+      [m
+[31m-        <form method="post" action="FrontController?action=RedirectAction&page=acervo.jsp">[m
+[32m+[m[32m        <form method="post" action="FrontController?action=BuscaAcervoAction">[m
+             <input type=submit value="Buscar o Acervo">[m
+         </form>[m
+         [m
+         <br />[m
+         [m
+[31m-        <form method="post" action="FrontController?action=RedirectAction&page=reservas.jsp">[m
+[32m+[m[32m        <form method="post" action="FrontController?action=RedirectAction&amp;page=reservas.jsp">[m
+             <input type=submit value="Consultar Reservas">[m
+         </form>[m
+         [m
+         <br />[m
+         [m
+[31m-        <form method="post" action="FrontController?action=RedirectAction&page=emprestimos.jsp">[m
+[32m+[m[32m        <form method="post" action="FrontController?action=RedirectAction&amp;page=emprestimos.jsp">[m
+             <input type=submit value="Renovar Empréstimo">[m
+         </form>[m
+         [m
+[1mdiff --git a/src/java/dao/ItemDAO.java b/src/java/dao/ItemDAO.java[m
+[1mindex 808f0bf..1d726e0 100644[m
+[1m--- a/src/java/dao/ItemDAO.java[m
+[1m+++ b/src/java/dao/ItemDAO.java[m
+[36m@@ -10,6 +10,7 @@[m [mimport java.sql.ResultSet;[m
+ import java.sql.SQLException;[m
+ import java.sql.Statement;[m
+ import java.util.ArrayList;[m
+[32m+[m[32mimport java.util.Iterator;[m
+ import java.util.List;[m
+ import java.util.logging.Level;[m
+ import java.util.logging.Logger;[m
+[36m@@ -102,4 +103,13 @@[m [mpublic class ItemDAO implements DAO<Item>{[m
+         //ItemDAO.getInstance().delete(t);[m
+     }[m
+     [m
+[32m+[m[32m    public List<Item> search(String term){[m
+[32m+[m[32m        List<Item> itemsSearched = new ArrayList<>();[m
+[32m+[m[32m        for(Item i: getAll()){[m
+[32m+[m[32m            if(i.getTitulo().contains(term))[m
+[32m+[m[32m                itemsSearched.add(i);[m
+[32m+[m[32m        }[m
+[32m+[m[32m        return itemsSearched;[m
+[32m+[m[32m    }[m
+[32m+[m[41m    [m
+ }[m
+[1mdiff --git a/src/java/persistencia/DatabaseLocator.java b/src/java/persistencia/DatabaseLocator.java[m
+[1mindex d9246da..70c9174 100644[m
+[1m--- a/src/java/persistencia/DatabaseLocator.java[m
+[1m+++ b/src/java/persistencia/DatabaseLocator.java[m
+[36m@@ -13,7 +13,7 @@[m [mpublic class DatabaseLocator {[m
+     [m
+         String driver = "com.mysql.jdbc.Driver";[m
+         Class.forName(driver);[m
+[31m-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydb?DateTimeBehavior=convertToNull", "root", "1234");[m
+[32m+[m[32m        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydb?DateTimeBehavior=convertToNull", "root", "");[m
+         return conn;[m
+ [m
+     }[m
+[1mdiff --git a/web/acervo.jsp b/web/acervo.jsp[m
+[1mindex a1de303..6a1b5fc 100644[m
+[1m--- a/web/acervo.jsp[m
+[1m+++ b/web/acervo.jsp[m
+[36m@@ -26,7 +26,7 @@[m
+                     <td>${item.id}</td>[m
+                     <td><c:out value="${item.titulo}" /></td>[m
+                     <td>[m
+[31m-                       <a href="FrontController?action=ReservarAction&amp;item="${item.id}>[m
+[32m+[m[32m                       <a href="FrontController?action=ReservarAction&amp;item=${item.id}">[m
+                           Reservar[m
+                        </a>[m
+                     </td>[m
+[1mdiff --git a/web/menuUsuario.jsp b/web/menuUsuario.jsp[m
+[1mindex c3ab753..dc7a407 100644[m
+[1m--- a/web/menuUsuario.jsp[m
+[1m+++ b/web/menuUsuario.jsp[m
+[36m@@ -18,19 +18,19 @@[m
+     <body>[m
+         <h1>Biblioteca</h1>[m
+      [m
+[31m-        <form method="post" action="FrontController?action=RedirectAction&page=acervo.jsp">[m
+[32m+[m[32m        <form method="post" action="FrontController?action=BuscaAcervoAction">[m
+             <input type=submit value="Buscar o Acervo">[m
+         </form>[m
+         [m
+         <br />[m
+         [m
+[31m-        <form method="post" action="FrontController?action=RedirectAction&page=reservas.jsp">[m
+[32m+[m[32m        <form method="post" action="FrontController?action=RedirectAction&amp;page=reservas.jsp">[m
+             <input type=submit value="Consultar Reservas">[m
+         </form>[m
+         [m
+         <br />[m
+         [m
+[31m-        <form method="post" action="FrontController?action=RedirectAction&page=emprestimos.jsp">[m
+[32m+[m[32m        <form method="post" action="FrontController?action=RedirectAction&amp;page=emprestimos.jsp">[m
+             <input type=submit value="Renovar Empréstimo">[m
+         </form>[m
+         [m

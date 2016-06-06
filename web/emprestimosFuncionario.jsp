@@ -30,7 +30,7 @@
                <th style = "width: 100px;">ID</th>
                <th style = "width: 100px;">Data do Empréstimo</th>
                <th style = "width: 100px;">Limite para Devolução</th>
-               <th style = "width: 100px;">Renovar</th>
+               <th style = "width: 100px;">Devolver</th>
             </tr>
          </thead>
          <tbody>
