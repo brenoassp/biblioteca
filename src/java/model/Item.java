@@ -15,7 +15,6 @@ import state.ItemEstadoDisponivel;
 public class Item extends Observable{
     private int id;
     private String titulo;
-    private List<Observer> observers;
     ItemEstado estado;
 
     public Item(){}
@@ -24,8 +23,7 @@ public class Item extends Observable{
         this.id = id;
         this.titulo = titulo;
         String classeEstado = "state.ItemEstado" + estado;
-        this.estado = (ItemEstado) Class.forName(classeEstado).getConstructor().newInstance();
-        this.observers = new ArrayList<>();
+        this.estado = (ItemEstado) Class.forName(classeEstado).getConstructor().newInstance(); 
     }
 
     public int getId() {
