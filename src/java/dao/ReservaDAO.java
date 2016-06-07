@@ -57,6 +57,15 @@ public class ReservaDAO implements DAO<Reserva>{
         }
         return reservas;
     }
+    
+     public List<Reserva> getReservasItem(int iditem){
+        List<Reserva> reservas = new ArrayList<>();
+        for(Reserva reserva: getAll()){
+            if(reserva.getIditem() == iditem)
+                reservas.add(reserva);
+        }
+        return reservas;
+    }
 
     public Reserva get(int id, String matricula){
         for(Reserva reserva: getAll()){

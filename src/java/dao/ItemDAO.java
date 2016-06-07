@@ -44,8 +44,6 @@ public class ItemDAO implements DAO<Item>{
         for(Revista revista : RevistaDAO.getInstance().getAll()){
             list.add(revista);
         }
-        for(Item i : list)
-            System.out.println(i.getTitulo());
         return list;
     }
 

@@ -56,12 +56,12 @@
             </thead>
             <tbody>
                 
-                <c:forEach items="${reservas}" var="reserva">
+                <c:forEach items="${reservasAtendidas}" var="reservaAtendida">
                     <tr>
-                        <td>${reserva.iditem}</td>
-                        <td>${reserva.posicao}</td>
+                        <td>${reservaAtendida.iditem}</td>
+                        <td>${reservaAtendida.posicao}</td>
                         <td>
-                           <a href="FrontController?action=CancelarReservaAction&amp;item=${reserva.iditem}">
+                           <a href="FrontController?action=CancelarReservaAction&amp;item=${reservaAtendida.iditem}">
                               Cancelar
                            </a>
                         </td>

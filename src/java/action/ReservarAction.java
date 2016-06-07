@@ -9,6 +9,7 @@ import dao.ItemDAO;
 import dao.ReservaDAO;
 import dao.UsuarioDAO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Item;
@@ -58,7 +59,8 @@ public class ReservarAction implements Action{
     }
     
     private void criaReserva(Usuario user, Item item){
-        Reserva reserva = new Reserva(user.getMatricula(), item.getId(), 0);
+        List<Reserva> reservasDesteItem = ReservaDAO.getInstance().getReservasItem(item.getId()); 
+        Reserva reserva = new Reserva(user.getMatricula(), item.getId(), reservasDesteItem.size()+1);
         ReservaDAO dao = ReservaDAO.getInstance();
         dao.insert(reserva);
     }
