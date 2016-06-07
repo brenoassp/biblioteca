@@ -26,7 +26,7 @@
                     <td>${item.id}</td>
                     <td><c:out value="${item.titulo}" /></td>
                     <td>
-                        <form method="post" action="FrontController?action=EmprestarAction">
+                        <form method="post" action="FrontController?action=EmprestarAction&iditem=${item.id}">
                             Matricula: <input type=text NAME="matricula" />
                             <input TYPE=submit VALUE="Emprestar" />
                         </form>

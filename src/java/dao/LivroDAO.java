@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,28 +31,41 @@ public class LivroDAO implements DAO<Livro>{
 
     @Override
     public List<Livro> getAll() {
+        List<Livro> list = new ArrayList<Livro>();
         Statement stmt;
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM ((item_livroDidatico INNER JOIN "
+            String sql = "SELECT * FROM (item_livroDidatico INNER JOIN "
                     + " item on item_livroDidatico.idlivroDidatico = item.iditem)";
             ResultSet rs = stmt.executeQuery(sql);
-            List<Livro> list = new ArrayList<Livro>();
             while(rs.next()){
                 int idLivro  = rs.getInt("idlivroDidatico");;
                 String titulo = rs.getString("titulo");
                 String editora = rs.getString("editora");
                 String ISBN = rs.getString("ISBN");
-                Livro livro = new Livro(idLivro, titulo, ISBN, editora);
-                list.add(livro);
+                String estado = rs.getString("estado");
+                Livro livro;
+                try {
+                    livro = new Livro(idLivro, titulo, ISBN, editora, estado);
+                    list.add(livro);
+                } catch (NoSuchMethodException ex) {
+                    Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            return list;
         } catch (SQLException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return list;
     }
 
     @Override
@@ -101,14 +115,15 @@ public class LivroDAO implements DAO<Livro>{
     public void update(Livro t) {
         try {
             //update item
-            String sql = "update item set titulo=? where iditem=?";
+            String sql = "update item set titulo=?, estado=? where iditem=?";
             PreparedStatement stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setString(1, t.getTitulo());
-            stmt.setInt(2, t.getId());
+            stmt.setString(2, t.getNomeEstado());
+            stmt.setInt(3, t.getId());
             stmt.execute();
             stmt.close();
             //update livro
-            sql = "update item_livrodidatico set ISBN=?, editora=? where idperiodico=?";
+            sql = "update item_livrodidatico set ISBN=?, editora=? where idlivroDidatico=?";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setString(1, t.getISBN());
             stmt.setString(2, t.getEditora());

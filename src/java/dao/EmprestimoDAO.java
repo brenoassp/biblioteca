@@ -112,7 +112,7 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
             stmt.setInt(3, t.getIditem());
             stmt.setDate(4, new java.sql.Date(t.getDataEmprestimo().getTimeInMillis()));
             stmt.setDate(5, new java.sql.Date(t.getDataDevolucao().getTimeInMillis()));
-            stmt.setDate(6, new java.sql.Date(t.getDataEntrega().getTimeInMillis()));
+            stmt.setDate(6, null);
             stmt.execute();
             stmt.close();
         } catch (SQLException ex) {
@@ -139,7 +139,7 @@ public class EmprestimoDAO implements DAO<Emprestimo>{
             stmt.execute();
             stmt.close();
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

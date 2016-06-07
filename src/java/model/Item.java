@@ -1,9 +1,11 @@
     package model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import state.ItemEstado;
 
 /**
  *
@@ -13,12 +15,15 @@ public class Item extends Observable{
     private int id;
     private String titulo;
     private List<Observer> observers;
+    ItemEstado estado;
 
     public Item(){}
     
-    public Item(int id, String titulo){
+    public Item(int id, String titulo, String estado) throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
         this.id = id;
         this.titulo = titulo;
+        String classeEstado = "state.ItemEstado" + estado;
+        this.estado = (ItemEstado) Class.forName(classeEstado).getConstructor().newInstance();
         this.observers = new ArrayList<>();
     }
 
@@ -45,6 +50,16 @@ public class Item extends Observable{
     public void setObservers(List<Observer> observers) {
         this.observers = observers;
     }
+
+    public ItemEstado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(ItemEstado estado) {
+        this.estado = estado;
+    }
     
-    
+    public String getNomeEstado() {
+        return estado.getEstado();
+    }
 }

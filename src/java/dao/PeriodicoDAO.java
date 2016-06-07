@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,27 +31,40 @@ public class PeriodicoDAO implements DAO<Periodico>{
 
     @Override
     public List<Periodico> getAll() {
+        List<Periodico> list = new ArrayList<Periodico>();
         Statement stmt;
         try {
             stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM ((item_periodico INNER JOIN "
+            String sql = "SELECT * FROM (item_periodico INNER JOIN "
                     + " item on item_periodico.idperiodico = item.iditem)";
-            ResultSet rs = stmt.executeQuery(sql);
-            List<Periodico> list = new ArrayList<Periodico>();
+            ResultSet rs = stmt.executeQuery(sql);           
             while(rs.next()){
                 int idPeriodico  = rs.getInt("idperiodico");;
                 String titulo = rs.getString("titulo");
                 String localPublicacao = rs.getString("localPublicacao");
-                Periodico periodico = new Periodico(idPeriodico, titulo, localPublicacao);
-                list.add(periodico);
-            }
-            return list;
+                String estado = rs.getString("estado");
+                Periodico periodico;
+                try {
+                    periodico = new Periodico(idPeriodico, titulo, localPublicacao, estado);
+                    list.add(periodico);
+                } catch (NoSuchMethodException ex) {
+                    Logger.getLogger(PeriodicoDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(PeriodicoDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(PeriodicoDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(PeriodicoDAO.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(PeriodicoDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }            
         } catch (SQLException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return list;
     }
 
     @Override
@@ -99,10 +113,11 @@ public class PeriodicoDAO implements DAO<Periodico>{
     public void update(Periodico t) {
         try {
             //update item
-            String sql = "update item set titulo=? where iditem=?";
+            String sql = "update item set titulo=?, estado=? where iditem=?";
             PreparedStatement stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setString(1, t.getTitulo());
-            stmt.setInt(2, t.getId());
+            stmt.setString(2, t.getNomeEstado());
+            stmt.setInt(3, t.getId());
             stmt.execute();
             stmt.close();
             //update periodico

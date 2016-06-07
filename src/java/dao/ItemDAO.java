@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Item;
 import model.Livro;
+import model.Periodico;
+import model.Revista;
 import persistencia.DatabaseLocator;
 
 /**
@@ -32,22 +34,18 @@ public class ItemDAO implements DAO<Item>{
 
     @Override
     public List<Item> getAll() {
-        Statement stmt;
         List<Item> list = new ArrayList<>();
-        try {
-            stmt = DatabaseLocator.getConnection().createStatement();
-            String sql = "SELECT * FROM item";
-            ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
-                int iditem  = rs.getInt("iditem");
-                String titulo = rs.getString("titulo");
-                Item item = new Item(iditem, titulo);
-                list.add(item);
-            }
-            return list;
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(AlunoGraduacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        for(Livro livro : LivroDAO.getInstance().getAll()){
+            list.add(livro);
         }
+        for(Periodico periodico : PeriodicoDAO.getInstance().getAll()){
+            list.add(periodico);
+        }
+        for(Revista revista : RevistaDAO.getInstance().getAll()){
+            list.add(revista);
+        }
+        for(Item i : list)
+            System.out.println(i.getTitulo());
         return list;
     }
 
@@ -71,10 +69,11 @@ public class ItemDAO implements DAO<Item>{
         PreparedStatement stmt;
         try {
             //inserir item
-            String sql = "INSERT INTO item (iditem, titulo) values (?,?)";
+            String sql = "INSERT INTO item (iditem, titulo, estado) values (?,?,?)";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setInt(1, t.getId());
             stmt.setString(2, t.getTitulo());
+            stmt.setString(3, t.getNomeEstado());
             stmt.execute();
             stmt.close();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -87,10 +86,11 @@ public class ItemDAO implements DAO<Item>{
         PreparedStatement stmt;
         try {
             //update item
-            String sql = "UPDATE item SET titulo=? WHERE iditem=?";
+            String sql = "UPDATE item SET titulo=?, estado=? WHERE iditem=?";
             stmt = DatabaseLocator.getConnection().prepareStatement(sql);
             stmt.setString(1, t.getTitulo());
-            stmt.setInt(2, t.getId());
+            stmt.setString(2, t.getNomeEstado());
+            stmt.setInt(3, t.getId());
             stmt.execute();
             stmt.close();
         } catch (SQLException | ClassNotFoundException ex) {

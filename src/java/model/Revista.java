@@ -1,5 +1,7 @@
 package model;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  *
  * @author anubis
@@ -9,8 +11,8 @@ public class Revista extends Item{
 
     public Revista() {}
 
-    public Revista(int id, String titulo, int numero) {
-        super(id, titulo);
+    public Revista(int id, String titulo, int numero, String estado) throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        super(id, titulo, estado);
         this.numero = numero;
     }
 

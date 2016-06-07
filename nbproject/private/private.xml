@@ -17,18 +17,12 @@
             <file>file:/home/anubis/UFJF/AspectosAvançadosES/Trabalho1/Trabalho1/src/java/model/Livro.java</file>
         </group>
         <group>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/model/Usuario.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/AlunoDAO.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/ServidorDAO.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/web/menuUsuario.jsp</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/model/Funcionario.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/AlunoGraduacaoDAO.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/FuncionarioDAO.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/PessoaDAO.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/DAO.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/AlunoPosGraduacaoDAO.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/model/Servidor.java</file>
-            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/UsuarioDAO.java</file>
+            <file>file:/E:/ufjf/aaes/biblioteca/src/java/action/EmprestarAction.java</file>
+            <file>file:/E:/ufjf/aaes/biblioteca/src/java/dao/EmprestimoDAO.java</file>
+            <file>file:/E:/ufjf/aaes/biblioteca/src/java/action/ReservarAction.java</file>
+            <file>file:/E:/ufjf/aaes/biblioteca/src/java/action/DevolverEmprestimoAction.java</file>
+            <file>file:/E:/ufjf/aaes/biblioteca/src/java/action/BuscaAcervoFuncionarioAction.java</file>
+            <file>file:/E:/ufjf/aaes/biblioteca/web/acervoFuncionario.jsp</file>
         </group>
     </open-files>
 </project-private>
