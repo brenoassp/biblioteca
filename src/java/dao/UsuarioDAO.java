@@ -11,6 +11,7 @@ import model.Aluno;
 import model.AlunoGraduacao;
 import model.AlunoPosGraduacao;
 import model.Funcionario;
+import model.Reserva;
 import model.Servidor;
 import model.Usuario;
 
@@ -37,6 +38,10 @@ public class UsuarioDAO implements DAO<Usuario>{
         }
         for(Servidor servidor : ServidorDAO.getInstance().getAll()){
             list.add(servidor);
+        }
+        for(Usuario user: list){
+            List<Reserva> userReservas = ReservaDAO.getInstance().getReservasUsuario(user.getMatricula());
+            user.setReservas(userReservas);
         }
         return list;
     }

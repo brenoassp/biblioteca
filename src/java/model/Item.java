@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import state.ItemEstado;
+import state.ItemEstadoDisponivel;
 
 /**
  *
@@ -43,23 +44,21 @@ public class Item extends Observable{
         this.titulo = titulo;
     }
 
-    public List<Observer> getObservers() {
-        return observers;
-    }
-
-    public void setObservers(List<Observer> observers) {
-        this.observers = observers;
-    }
-
     public ItemEstado getEstado() {
         return estado;
     }
 
     public void setEstado(ItemEstado estado) {
         this.estado = estado;
+        if(this.estado instanceof ItemEstadoDisponivel){
+            setChanged();
+            notifyObservers();
+        }
     }
     
     public String getNomeEstado() {
         return estado.getEstado();
     }
+    
+    
 }

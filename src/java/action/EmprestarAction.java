@@ -33,14 +33,20 @@ public class EmprestarAction implements Action {
 
             EmprestimoDAO daoEmprestimo = EmprestimoDAO.getInstance();
             daoEmprestimo.insert(emprestimo);
+            apagaReserva(matricula, iditem);
 
             ItemDAO daoItem = ItemDAO.getInstance();
             Item item = daoItem.get(iditem);
             item.getEstado().emprestar(item);
             daoItem.update(item);
+            
         }
         //redireciona pra busca de acervo do funcionario
         new BuscaAcervoFuncionarioAction().execute(request, response);    
+    }
+    
+    public void apagaReserva(String matricula, int iditem){
+        
     }
     
 }

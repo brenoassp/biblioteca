@@ -2,6 +2,8 @@ package action;
 
 import dao.EmprestimoDAO;
 import dao.ItemDAO;
+import dao.ReservaDAO;
+import dao.UsuarioDAO;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import model.Emprestimo;
 import model.Item;
 import model.Multa;
+import model.Reserva;
+import model.Usuario;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
@@ -70,6 +74,8 @@ public class DevolverEmprestimoAction implements Action{
             emprestimo.setDataEntrega(dataAtual);
             EmprestimoDAO.getInstance().update(emprestimo);
             Item item = ItemDAO.getInstance().get(emprestimo.getIditem());
+            atualizaPosicaoReservas(item.getId());
+            List<Usuario> users = UsuarioDAO.getInstance().getAll();
             item.getEstado().devolver(item);
             ItemDAO.getInstance().update(item);
             System.out.println(sdf.format(emprestimo.getDataEntrega().getTime()));
@@ -83,6 +89,14 @@ public class DevolverEmprestimoAction implements Action{
     private Emprestimo getEmprestimo(int idemprestimo) {
         EmprestimoDAO dao = EmprestimoDAO.getInstance();
         return dao.get(idemprestimo);
+    }
+
+    private void atualizaPosicaoReservas(int iditem) {
+        List<Reserva> reservas = ReservaDAO.getInstance().getReservasItem(iditem);
+        for(Reserva reserva: reservas){
+            reserva.setPosicao(reserva.getPosicao()-1);
+            ReservaDAO.getInstance().update(reserva);
+        }
     }
     
 }

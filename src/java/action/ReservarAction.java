@@ -61,6 +61,7 @@ public class ReservarAction implements Action{
     private void criaReserva(Usuario user, Item item){
         List<Reserva> reservasDesteItem = ReservaDAO.getInstance().getReservasItem(item.getId()); 
         Reserva reserva = new Reserva(user.getMatricula(), item.getId(), reservasDesteItem.size()+1);
+        item.addObserver(user);
         ReservaDAO dao = ReservaDAO.getInstance();
         dao.insert(reserva);
     }

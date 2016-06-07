@@ -1,5 +1,7 @@
 package model;
 
+import dao.ReservaDAO;
+import dao.UsuarioDAO;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +46,6 @@ public class Usuario extends Pessoa implements Observer{
         this.estado = estado;
     }
     
-    @Override
-    public void update(Observable o, Object arg) {
-        // um livro com reserva foi devolvido
-    }
-    
     public boolean isFuncionario(){
         return false;
     }
@@ -61,6 +58,10 @@ public class Usuario extends Pessoa implements Observer{
         this.senha = senha;
     }
 
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+    
     public List<Reserva> getReservas() {
         return reservas;
     }
@@ -71,6 +72,18 @@ public class Usuario extends Pessoa implements Observer{
     
     public void removeReserva(Reserva reserva){
         reservas.remove(reserva);
+    }
+    
+    @Override
+    public void update(Observable itemSubject, Object arg) {
+        if(itemSubject instanceof Item){
+            Item item = (Item) itemSubject;
+            Reserva reserva = ReservaDAO.getInstance().get(item.getId(), matricula);
+            if(reserva.getPosicao() == 1){
+                System.out.println("Atenção usuario "+matricula+", item "+item.getTitulo()+" disponivel na reserva");
+            }
+        }
+                
     }
     
  }
