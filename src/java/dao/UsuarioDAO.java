@@ -41,7 +41,9 @@ public class UsuarioDAO implements DAO<Usuario>{
         }
         for(Usuario user: list){
             List<Reserva> userReservas = ReservaDAO.getInstance().getReservasUsuario(user.getMatricula());
-            user.setReservas(userReservas);
+            for(Reserva reserva: userReservas){
+                user.addReserva(reserva);
+            }
         }
         return list;
     }

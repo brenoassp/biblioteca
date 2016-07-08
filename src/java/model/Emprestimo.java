@@ -6,6 +6,8 @@
 package model;
 
 import java.util.Calendar;
+import strategy.EmprestimoConsulta;
+import strategy.TipoEmprestimo;
 
 /**
  *
@@ -19,6 +21,7 @@ public class Emprestimo {
     private Calendar dataEmprestimo;
     private Calendar dataDevolucao;
     private Calendar dataEntrega;
+    private TipoEmprestimo tipo;
 
     public int getIdemprestimo() {
         return idemprestimo;
@@ -77,7 +80,12 @@ public class Emprestimo {
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
         this.dataEntrega = dataEntrega;
+        this.tipo = new EmprestimoConsulta();
     }
     
     public Emprestimo(){}
+    
+    public float getMulta(int numeroDias){
+        return tipo.calculaMulta(numeroDias);
+    }
 }

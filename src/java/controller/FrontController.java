@@ -32,29 +32,7 @@ public class FrontController extends HttpServlet {
             response.sendRedirect("index.html");
         }
         actionObject = ActionFactory.getAction(action);
-        /*else if(action.equals("Login")){
-            actionObject = new LoginAction();  
-        }
-        else if(action.equals("Logout")){
-            actionObject = new LogoutAction();  
-        }
-        else if(action.equals("Redirect")){
-            String page = request.getParameter("page");
-            actionObject = new RedirectAction(page);  
-        }
-        else if(action.equals("Reservar")){
-            actionObject = new ReservarAction();
-        }
-        else if(action.equals("CancelarReserva")){
-            actionObject = new ReservarAction();
-        }
-        else if(action.equals("RenovarEmprestimo")){
-            actionObject = new ReservarAction();
-        }
-        else if(action.equals("DevolverItem")){
-            actionObject = new ReservarAction();
-        }*/
-           
+        
         if(actionObject!=null){
             actionObject.execute(request, response);
         }

@@ -2,6 +2,7 @@ package action;
 
 import dao.EmprestimoDAO;
 import dao.ItemDAO;
+import dao.ReservaDAO;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Emprestimo;
 import model.Item;
+import model.Reserva;
 
 /**
  *
@@ -46,7 +48,8 @@ public class EmprestarAction implements Action {
     }
     
     public void apagaReserva(String matricula, int iditem){
-        
+        Reserva reserva = ReservaDAO.getInstance().get(iditem, matricula);
+        ReservaDAO.getInstance().delete(reserva);
     }
     
 }

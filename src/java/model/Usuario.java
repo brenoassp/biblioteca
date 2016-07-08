@@ -1,5 +1,6 @@
 package model;
 
+import dao.ItemDAO;
 import dao.ReservaDAO;
 import dao.UsuarioDAO;
 import java.sql.Date;
@@ -57,10 +58,6 @@ public class Usuario extends Pessoa implements Observer{
     public void setSenha(String senha) {
         this.senha = senha;
     }
-
-    public void setReservas(List<Reserva> reservas) {
-        this.reservas = reservas;
-    }
     
     public List<Reserva> getReservas() {
         return reservas;
@@ -68,6 +65,8 @@ public class Usuario extends Pessoa implements Observer{
 
     public void addReserva(Reserva reserva){
         reservas.add(reserva);
+        Item observable = ItemDAO.getInstance().get(reserva.getIditem());
+        observable.addObserver(this);
     }
     
     public void removeReserva(Reserva reserva){

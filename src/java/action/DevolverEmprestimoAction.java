@@ -6,13 +6,8 @@ import dao.MultaDAO;
 import dao.ReservaDAO;
 import dao.UsuarioDAO;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Emprestimo;
@@ -37,14 +32,13 @@ public class DevolverEmprestimoAction implements Action{
         Calendar dataAtual = Calendar.getInstance();
         if(dataLimite.compareTo(dataAtual) < 0){
             //calcula multa
-            double multaPorDia = 0.5;
-
             long d1=dataAtual.getTimeInMillis();
             long d2=dataLimite.getTimeInMillis();
 
             long qtdDiasAtraso = Math.abs((d1-d2)/(1000*60*60*24));
             
-            double valor = qtdDiasAtraso * multaPorDia;
+            double valor = emprestimo.getMulta((int)qtdDiasAtraso);
+            
             Multa multa = new Multa(emprestimo.getIdemprestimo(),
                                 emprestimo.getMatriculaUsuario(),
                                 valor);
